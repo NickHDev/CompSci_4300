@@ -13,27 +13,22 @@ data = [
     ([1,0],1),
     ([1,1],1)
 ]
+
 cooling = float(input("Enter Cooling Schedule: "))
-Temp = 1
+
 # Neuron
 def neuron(X,Y,Wx,Wy,b):
-    valueTotal = (X * Wx + Y * Wy + b)
-    return valueTotal
+    return (X * Wx + Y * Wy + b)
 
-# Schedule
-def schedule(t):
-    t = t / cooling
-    return t
-
+# Instantiating
 class GateProblem:
     def inital_state(self):
-        # Instantiating
         Wx = 0
         Wy = 0
         b = 0
         return [Wx, Wy, b]
 
-
+    # Random Next perturbation of nodes
     def neighbor(self, current):
         Wx, Wy, b = current
         Wx = Wx + random.uniform(-2,2)
@@ -41,7 +36,7 @@ class GateProblem:
         b = b + random.uniform(-2,2)
         return [Wx, Wy, b]
 
-
+    # Get Value of total errors for this iteration
     def value(self, current):
         Wx, Wy, b = current
         errorTotal = 0
@@ -55,8 +50,9 @@ def simulated_annealing(problem):
     # Inital state
     current = problem.inital_state()
     Temp = 1
-    while Temp > 0.01:
-        Temp = schedule(Temp)
+    while Temp > 0.001:
+        # Schedule
+        Temp = Temp / cooling
         
         # Pick random Successor
         next = problem.neighbor(current)
